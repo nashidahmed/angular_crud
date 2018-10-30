@@ -1,0 +1,123 @@
+<form [formGroup]="editForm" (submit)="updateCustomer()">
+	<div class="border-bottom">
+		<div class="row py-1">
+			<div class="col-1" *ngIf="!customer.isNew">
+				{{customer.id}}
+			</div>
+			<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
+				<span class="font-weight-bold" *ngIf="customer.isNew">First Name: </span>
+				<span *ngIf="!customer.editMode">{{customer.first_name}}</span>
+				<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': first_name.errors && (first_name.dirty || first_name.touched)}"
+				 [formControl]="first_name" type="text" class="form-control" />
+				<small *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)" class="text-danger">
+					<div *ngIf="first_name.errors.required">
+						First name is required.
+					</div>
+				</small>
+			</div>
+			<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
+				<span class="font-weight-bold" *ngIf="customer.isNew">Last Name: </span>
+				<span *ngIf="!customer.editMode">{{customer.last_name}}</span>
+				<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': last_name.errors && (last_name.dirty || last_name.touched)}"
+				 [formControl]="last_name" type="text" class="form-control" />
+				<small *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="text-danger">
+					<div *ngIf="last_name.errors.required">
+						Last name is required.
+					</div>
+				</small>
+			</div>
+			<div [ngClass]="{'col-4': customer.isNew, 'col-3': !customer.isNew}">
+				<span class="font-weight-bold" *ngIf="customer.isNew">Email: </span>
+				<span *ngIf="!customer.editMode">{{customer.email}}</span>
+				<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': email.errors && (email.dirty || email.touched)}"
+				 [formControl]="email" type="email" class="form-control" />
+				<small *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+					<div *ngIf="email.errors.required">
+						Email is required.
+					</div>
+					<div *ngIf="email.errors.pattern">
+						Please enter a valid email address.
+					</div>
+				</small>
+			</div>
+			<div class="col-2" *ngIf="!customer.isNew">
+				<fa-icon class="mr-2" [icon]="faEdit" data-toggle="tooltip" data-placement="top" title="Edit Customer" (click)="editCustomer()"></fa-icon>
+				<fa-icon [icon]="faTrashAlt" data-toggle="tooltip" data-placement="top" title="Delete Customer" (click)="deleteCustomer(confirmDelete)"></fa-icon>
+			</div>
+			<div class="col-2" *ngIf="!customer.isNew">
+				<span (click)="toggleDetails()" class="cursor-pointer">
+					View Details
+					<fa-icon *ngIf="customer.showDetails" [icon]="faCaretUp"></fa-icon>
+					<fa-icon *ngIf="!customer.showDetails" [icon]="faCaretDown"></fa-icon>
+				</span>
+			</div>
+		</div>
+		<div [hidden]="!customer.showDetails" class="py-2">
+			<div class="row">
+				<div [ngClass]="{'col-4': customer.isNew, 'col-2 offset-sm-1': !customer.isNew}">
+					<span class="font-weight-bold">IP: </span>
+					<span *ngIf="!customer.editMode">{{customer.ip}}</span>
+					<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': ip.errors && (ip.dirty || ip.touched)}" [formControl]="ip"
+					 type="text" class="form-control" />
+					<small *ngIf="ip.invalid && (ip.dirty || ip.touched)" class="text-danger">
+						<div *ngIf="ip.errors.required">
+							IP is required.
+						</div>
+					</small>
+				</div>
+				<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
+					<span class="font-weight-bold">Latitude: </span>
+					<span *ngIf="!customer.editMode">{{customer.latitude}}</span>
+					<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': latitude.errors && (latitude.dirty || latitude.touched)}"
+					 [formControl]="latitude" type="text" class="form-control" />
+					<small *ngIf="latitude.invalid && (latitude.dirty || latitude.touched)" class="text-danger">
+						<div *ngIf="latitude.errors.required">
+							Latitude is required.
+						</div>
+					</small>
+				</div>
+				<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
+					<span class="font-weight-bold">Longitude: </span>
+					<span *ngIf="!customer.editMode">{{customer.longitude}}</span>
+					<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': longitude.errors && (longitude.dirty || longitude.touched)}"
+					 [formControl]="longitude" type="text" class="form-control" />
+					<small *ngIf="longitude.invalid && (longitude.dirty || longitude.touched)" class="text-danger">
+						<div *ngIf="longitude.errors.required">
+							Longitude is required.
+						</div>
+					</small>
+				</div>
+			</div>
+			<div class="row py-2">
+				<div [ngClass]="{'col-sm-12': customer.isNew, 'col-sm-11 offset-sm-1': !customer.isNew}" *ngIf="!customer.isNew">
+					<span class="font-weight-bold">Created at: </span>{{customer.created_at | date: 'medium'}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-11 offset-sm-1" *ngIf="customer.updated_at">
+					<span class="font-weight-bold">Updated at: </span>{{customer.updated_at | date: 'medium'}}
+				</div>
+			</div>
+			<div class="row">
+				<div [ngClass]="{'col-sm-3 offset-sm-9': customer.isNew, 'col-sm-2 offset-sm-6': !customer.isNew}" *ngIf="customer.editMode">
+					<button type="submit" class="btn btn-block btn-success" id="updateCustomer" [disabled]="editForm.invalid">Update Customer</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<ng-template #confirmDelete>
+	<div class="modal-header">
+		<h5 class="modal-title">Delete customer</h5>
+		<button type="button" class="close" (click)="closeModal()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<p>Are you sure you want to delete {{customer.first_name}} {{customer.last_name}}?</p>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" (click)="closeModal()">No</button>
+		<button type="button" class="btn btn-primary" (click)="confirm()">Yes</button>
+	</div>
+</ng-template>

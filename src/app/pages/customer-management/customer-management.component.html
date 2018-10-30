@@ -1,0 +1,51 @@
+<div class="container pb-5">
+	<h2 class="text-center my-4">Customer Management Portal</h2>
+
+	<!-- Add button and search bar -->
+	<div class="row">
+		<div class="col-sm-2">
+			<button type="button" id="addNewCustomer" class="btn btn-secondary" (click)="addCustomer(newCustomerTemplate)" [disabled]="disableAddButton">Add Customer</button>
+		</div>
+		<div class="col-sm-4 offset-sm-6">
+			<div class="form-group">
+				<input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Search Customers" />
+			</div>
+		</div>
+	</div>
+
+	<div class="row py-1 border-bottom font-weight-bold table-header">
+		<div class="col-1">
+			ID
+		</div>
+		<div class="col-2">
+			First Name
+		</div>
+		<div class="col-2">
+			Last Name
+		</div>
+		<div class="col-3">
+			Email
+		</div>
+		<div class="col-2">
+			Actions
+		</div>
+	</div>
+	<div *ngFor="let customer of customers | search: searchText | paginate: paginationConfig; index as i">
+		<app-customer [customer]="customer" (delete)="onDelete($event)" (editMode)="onEditMode($event)" (update)="onUpdate($event)"></app-customer>
+	</div>
+	<!-- Pagination controls -->
+	<div class="text-center mt-4">
+		<pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+	</div>
+</div>
+<ng-template #newCustomerTemplate>
+	<div class="modal-header">
+		<h5 class="modal-title">New customer</h5>
+		<button type="button" class="close" (click)="closeModal()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<app-customer [customer]="newCustomer" (update)="onAdd($event);closeModal();"></app-customer>
+	</div>
+</ng-template>
