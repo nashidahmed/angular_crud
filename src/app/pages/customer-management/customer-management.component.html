@@ -4,7 +4,7 @@
 	<!-- Add button and search bar -->
 	<div class="row">
 		<div class="col-sm-2">
-			<button type="button" id="addNewCustomer" class="btn btn-secondary" (click)="addCustomer(newCustomerTemplate)" [disabled]="disableAddButton">Add Customer</button>
+			<button type="button" id="addNewCustomer" class="btn btn-secondary" (click)="addCustomer(addCustomerTemplate)" [disabled]="disableAddButton">Add Customer</button>
 		</div>
 		<div class="col-sm-4 offset-sm-6">
 			<div class="form-group">
@@ -38,14 +38,15 @@
 		<pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
 	</div>
 </div>
-<ng-template #newCustomerTemplate>
+
+<ng-template #addCustomerTemplate>
 	<div class="modal-header">
 		<h5 class="modal-title">New customer</h5>
-		<button type="button" class="close" (click)="closeModal()">
+		<button type="button" class="close" (click)="bsModalRef.hide()">
 			<span aria-hidden="true">&times;</span>
 		</button>
 	</div>
 	<div class="modal-body">
-		<app-customer [customer]="newCustomer" (update)="onAdd($event);closeModal();"></app-customer>
+		<app-customer [customer]="newCustomer" (update)="onAdd($event);bsModalRef.hide();"></app-customer>
 	</div>
 </ng-template>

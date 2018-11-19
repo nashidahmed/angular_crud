@@ -1,42 +1,38 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { CustomersService } from './customers.service';
 import { TestCustomers } from 'src/app/pages/customer-management/customer-management.component.spec';
-import { of } from 'rxjs';
 
 describe('CustomersService', () => {
-    let httpClientSpy: { get: jasmine.Spy };
     let customersService: CustomersService;
+
     const customerList = TestCustomers;
 
     beforeEach(() => {
-        httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
-        customersService = new CustomersService(<any>httpClientSpy);
-
         TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
             providers: [CustomersService]
         });
+
+        customersService = TestBed.get(CustomersService);
+        customersService.customers = [...customerList];
     });
 
     it('should be created', () => {
         expect(customersService).toBeTruthy();
     });
 
-    describe('.getAll()', () => {
+    describe('.get()', () => {
         it('should exist', () => {
-            expect(customersService.getAll).toBeDefined();
+            expect(customersService.get).toBeDefined();
         });
 
         it('should get all the customers', () => {
-            httpClientSpy.get.and.returnValue(of(customerList));
-
-            customersService.getAll()
-            .subscribe(
-                customers => expect(customers).toEqual(customerList, 'expected customers'),
-                fail
-            );
-
-            expect(httpClientSpy.get.calls.count()).toBe(1, 'one call');
+            customersService.get()
+            .subscribe(customers => {
+                expect(customers).toEqual(customerList, 'expected customers');
+            });
         });
     });
 
@@ -55,10 +51,16 @@ describe('CustomersService', () => {
         });
 
         it('should add a new customer', () => {
-            const newCustomerList = customersService.add(newCustomer, customerList);
+            const newCustomerList = [...customerList, newCustomer];
 
-            expect(newCustomerList.length).toEqual(customerList.length + 1);
-            expect(newCustomerList).toContain(jasmine.objectContaining(newCustomer));
+            customersService.add(newCustomer)
+            .subscribe(() => {
+                customersService.get()
+                .subscribe((customers: any) => {
+                    expect(customers.length).toEqual(newCustomerList.length);
+                    expect(customers).toContain(jasmine.objectContaining(newCustomer));
+                });
+            });
         });
     });
 
@@ -80,10 +82,21 @@ describe('CustomersService', () => {
         });
 
         it('should update an existing customer', () => {
-            const newCustomerList = customersService.update(updatedCustomer, customerList);
+            const index = customerList.findIndex(customer => customer.id === updatedCustomer.id);
+            const newCustomerList = [
+                ...customerList.slice(0, index),
+                updatedCustomer,
+                ...customerList.slice(index + 1)
+            ];
 
-            expect(newCustomerList.length).toEqual(customerList.length);
-            expect(newCustomerList).toContain(jasmine.objectContaining(updatedCustomer));
+            customersService.update(updatedCustomer)
+            .subscribe(() => {
+                customersService.get()
+                .subscribe((customers: any) => {
+                    expect(customers.length).toEqual(newCustomerList.length);
+                    expect(customers).toContain(jasmine.objectContaining(updatedCustomer));
+                });
+            });
         });
     });
 
@@ -106,10 +119,16 @@ describe('CustomersService', () => {
         });
 
         it('should delete an existing customer', () => {
-            const newCustomerList = customersService.delete(deletedCustomerId, customerList);
+            const newCustomerList = customerList.filter(customer => customer.id !== deletedCustomerId);
 
-            expect(newCustomerList.length).toEqual(customerList.length - 1);
-            expect(newCustomerList).not.toContain(jasmine.objectContaining(deletedCustomer));
+            customersService.delete(deletedCustomerId)
+            .subscribe(() => {
+                customersService.get()
+                .subscribe((customers: any) => {
+                    expect(customers.length).toEqual(newCustomerList.length);
+                    expect(customers).not.toContain(jasmine.objectContaining(deletedCustomer));
+                });
+            });
         });
     });
 });

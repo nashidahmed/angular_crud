@@ -5,40 +5,13 @@
 				{{customer.id}}
 			</div>
 			<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
-				<span class="font-weight-bold" *ngIf="customer.isNew">First Name: </span>
-				<span *ngIf="!customer.editMode">{{customer.first_name}}</span>
-				<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': first_name.errors && (first_name.dirty || first_name.touched)}"
-				 [formControl]="first_name" type="text" class="form-control" />
-				<small *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)" class="text-danger">
-					<div *ngIf="first_name.errors.required">
-						First name is required.
-					</div>
-				</small>
+				<app-customer-input [customer]="customer" [title]="'First Name'" [control]="first_name" [input]="'first_name'"></app-customer-input>
 			</div>
 			<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
-				<span class="font-weight-bold" *ngIf="customer.isNew">Last Name: </span>
-				<span *ngIf="!customer.editMode">{{customer.last_name}}</span>
-				<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': last_name.errors && (last_name.dirty || last_name.touched)}"
-				 [formControl]="last_name" type="text" class="form-control" />
-				<small *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="text-danger">
-					<div *ngIf="last_name.errors.required">
-						Last name is required.
-					</div>
-				</small>
+				<app-customer-input [customer]="customer" [title]="'Last Name'" [control]="last_name" [input]="'last_name'"></app-customer-input>
 			</div>
 			<div [ngClass]="{'col-4': customer.isNew, 'col-3': !customer.isNew}">
-				<span class="font-weight-bold" *ngIf="customer.isNew">Email: </span>
-				<span *ngIf="!customer.editMode">{{customer.email}}</span>
-				<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': email.errors && (email.dirty || email.touched)}"
-				 [formControl]="email" type="email" class="form-control" />
-				<small *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
-					<div *ngIf="email.errors.required">
-						Email is required.
-					</div>
-					<div *ngIf="email.errors.pattern">
-						Please enter a valid email address.
-					</div>
-				</small>
+				<app-customer-input [customer]="customer" [title]="'Email'" [control]="email" [input]="'email'"></app-customer-input>
 			</div>
 			<div class="col-2" *ngIf="!customer.isNew">
 				<fa-icon class="mr-2" [icon]="faEdit" data-toggle="tooltip" data-placement="top" title="Edit Customer" (click)="editCustomer()"></fa-icon>
@@ -55,37 +28,13 @@
 		<div [hidden]="!customer.showDetails" class="py-2">
 			<div class="row">
 				<div [ngClass]="{'col-4': customer.isNew, 'col-2 offset-sm-1': !customer.isNew}">
-					<span class="font-weight-bold">IP: </span>
-					<span *ngIf="!customer.editMode">{{customer.ip}}</span>
-					<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': ip.errors && (ip.dirty || ip.touched)}" [formControl]="ip"
-					 type="text" class="form-control" />
-					<small *ngIf="ip.invalid && (ip.dirty || ip.touched)" class="text-danger">
-						<div *ngIf="ip.errors.required">
-							IP is required.
-						</div>
-					</small>
+					<app-customer-input [customer]="customer" [title]="'IP'" [control]="ip" [input]="'ip'" [showTitle]="true"></app-customer-input>
 				</div>
 				<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
-					<span class="font-weight-bold">Latitude: </span>
-					<span *ngIf="!customer.editMode">{{customer.latitude}}</span>
-					<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': latitude.errors && (latitude.dirty || latitude.touched)}"
-					 [formControl]="latitude" type="text" class="form-control" />
-					<small *ngIf="latitude.invalid && (latitude.dirty || latitude.touched)" class="text-danger">
-						<div *ngIf="latitude.errors.required">
-							Latitude is required.
-						</div>
-					</small>
+					<app-customer-input [customer]="customer" [title]="'Latitude'" [control]="latitude" [input]="'latitude'" [showTitle]="true"></app-customer-input>
 				</div>
 				<div [ngClass]="{'col-4': customer.isNew, 'col-2': !customer.isNew}">
-					<span class="font-weight-bold">Longitude: </span>
-					<span *ngIf="!customer.editMode">{{customer.longitude}}</span>
-					<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': longitude.errors && (longitude.dirty || longitude.touched)}"
-					 [formControl]="longitude" type="text" class="form-control" />
-					<small *ngIf="longitude.invalid && (longitude.dirty || longitude.touched)" class="text-danger">
-						<div *ngIf="longitude.errors.required">
-							Longitude is required.
-						</div>
-					</small>
+					<app-customer-input [customer]="customer" [title]="'Longitude'" [control]="longitude" [input]="'longitude'" [showTitle]="true"></app-customer-input>
 				</div>
 			</div>
 			<div class="row py-2">
@@ -106,6 +55,7 @@
 		</div>
 	</div>
 </form>
+
 <ng-template #confirmDelete>
 	<div class="modal-header">
 		<h5 class="modal-title">Delete customer</h5>

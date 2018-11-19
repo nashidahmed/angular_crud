@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { faEdit, faTrashAlt, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
-import { EmailRegex } from 'src/app/config/constants';
+import { EmailRegex, IpRegex, LatitudeRegex, LongitudeRegex } from 'src/app/config/constants';
 
 @Component({
     selector: 'app-customer',
@@ -41,17 +41,13 @@ export class CustomerComponent implements OnInit {
     }
 
     updateCustomer() {
-        this.editMode.emit(false);
         this.customer.editMode = false;
+        this.editMode.emit(false);
 
         // If new customer is added do not set 'updated_at' timestamp
         if (this.customer.isNew) {
             // mark customer as old after first edit
-            this.customer.created_at = new Date();
             this.customer.isNew = false;
-        } else {
-            // set 'updated_at' timestamp
-            this.customer.updated_at = new Date();
         }
 
         this.customer = { ...this.customer, ...this.editForm.value };
@@ -94,9 +90,18 @@ export class CustomerComponent implements OnInit {
                 Validators.required,
                 Validators.pattern(EmailRegex),
             ]],
-            ip: [this.customer.ip, Validators.required],
-            latitude: [this.customer.latitude, Validators.required],
-            longitude: [this.customer.longitude, Validators.required]
+            ip: [this.customer.ip, [
+                Validators.required,
+                Validators.pattern(IpRegex)
+            ]],
+            latitude: [this.customer.latitude, [
+                Validators.required,
+                Validators.pattern(LatitudeRegex)
+            ]],
+            longitude: [this.customer.longitude, [
+                Validators.required,
+                Validators.pattern(LongitudeRegex)
+            ]]
         });
     }
 

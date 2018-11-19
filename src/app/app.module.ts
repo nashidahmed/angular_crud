@@ -6,7 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertModule } from 'ngx-alerts';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 // Routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +21,7 @@ import { CustomerManagementComponent } from './pages/customer-management/custome
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CustomerComponent } from './components/customer/customer.component';
+import { CustomerInputComponent } from './components/customer-input/customer-input.component';
 
 // Services
 import { CustomersService } from './providers/services/customers.service';
@@ -35,7 +36,8 @@ import { SearchPipe } from './providers/pipes/search.pipe';
     FooterComponent,
     SearchPipe,
     CustomerManagementComponent,
-    CustomerComponent
+    CustomerComponent,
+    CustomerInputComponent
   ],
   imports: [
     BrowserModule,

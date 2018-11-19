@@ -1,0 +1,12 @@
+<span class="font-weight-bold" *ngIf="customer.isNew || showTitle">{{title}}: </span>
+<span *ngIf="!customer.editMode">{{customer[input]}}</span>
+<input *ngIf="customer.editMode" [ngClass]="{'is-invalid': control.errors && (control.dirty || control.touched)}"
+ [formControl]="control" type="text" class="form-control" />
+<small *ngIf="control.invalid && (control.dirty || control.touched)" class="text-danger">
+	<div *ngIf="control.errors.required">
+		{{title}} is required.
+	</div>
+	<div *ngIf="control.errors.pattern">
+		Please enter a valid {{title | lowercase}}.
+	</div>
+</small>

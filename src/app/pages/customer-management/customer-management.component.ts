@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CustomersService } from 'src/app/providers/services/customers.service';
 import { PaginationInstance } from 'ngx-pagination';
 import { AlertService } from 'ngx-alerts';
@@ -11,7 +11,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 })
 export class CustomerManagementComponent implements OnInit {
 
-    modalRef: BsModalRef;
+    bsModalRef: BsModalRef;
     newCustomer: any;
     disableAddButton: boolean;
     searchText: string;
@@ -25,45 +25,53 @@ export class CustomerManagementComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.customersService.getAll()
-        .subscribe(data => {
-            this.customers = data;
-
-            this.customers.forEach(customer => {
+        this.customersService.init()
+        .subscribe((data: any) => {
+            data.forEach(customer => {
                 customer.created_at = new Date(customer.created_at);
 
                 if (customer.updated_at) {
                     customer.updated_at = new Date(customer.updated_at);
                 }
             });
+
+            this.customersService.customers = this.customers = data;
         });
 
         this.paginationConfig = {
             itemsPerPage: 10,
             currentPage: 1
         };
+
+        // this.customersService.customers$
+        // .subscribe(customers => this.customers = customers);
     }
 
-    onPageChange(pageNumber: number) {
-        this.paginationConfig.currentPage = pageNumber;
+    getCustomers() {
+        this.customersService.get()
+        .subscribe(data => {
+            this.customers = data;
+        });
     }
 
     addCustomer(template: TemplateRef<any>) {
         this.newCustomer = {
-            id: this.customers[this.customers.length - 1].id + 1,
             email: '',
             first_name: '',
             last_name: '',
             ip: '',
             latitude: '',
             longitude: '',
-            updated_at: null,
             editMode: true,
             showDetails: true,
             isNew: true
         };
 
-        this.openModal(template);
+        this.bsModalRef = this.modalService.show(template, { class: 'modal-lg' });
+    }
+
+    onPageChange(pageNumber: number) {
+        this.paginationConfig.currentPage = pageNumber;
     }
 
     onEditMode(disableAddButton: boolean) {
@@ -71,27 +79,25 @@ export class CustomerManagementComponent implements OnInit {
     }
 
     onAdd(customer: any) {
-        this.customers = this.customersService.add(customer, this.customers);
-        this.paginationConfig.currentPage = Math.ceil(this.customers.length / this.paginationConfig.itemsPerPage);
+        this.customersService.add(customer)
+        .subscribe(() => {
+            this.getCustomers();
+            this.paginationConfig.currentPage = Math.ceil(this.customers.length / this.paginationConfig.itemsPerPage);
+        });
     }
 
     onUpdate(customer: any) {
-        this.customers = this.customersService.update(customer, this.customers);
+        this.customersService.update(customer)
+        .subscribe(() => this.getCustomers());
     }
 
     onDelete(customerId: number) {
         const deletedCustomer = this.customers.find(customer => customer.id === customerId);
-        this.customers = this.customersService.delete(customerId, this.customers);
-        this.alertService.success(deletedCustomer.first_name + ' ' + deletedCustomer.last_name + ' has been successfully deleted.');
+        this.customersService.delete(customerId)
+        .subscribe(() => {
+            this.getCustomers();
+            // tslint:disable-next-line:max-line-length
+            this.alertService.success(`${[deletedCustomer.first_name, deletedCustomer.last_name].join(' ')} has been successfully deleted.`);
+        });
     }
-
-    // Modal controls
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
-    }
-
-    closeModal() {
-        this.modalRef.hide();
-    }
-
 }

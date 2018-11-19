@@ -3,8 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CustomerComponent } from './customer.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MockModule } from 'ng-mocks';
+import { MockModule, MockComponent } from 'ng-mocks';
 import { ModalModule } from 'ngx-bootstrap';
+import { CustomerInputComponent } from '../customer-input/customer-input.component';
 
 describe('CustomerComponent', () => {
     let component: CustomerComponent;
@@ -17,7 +18,10 @@ describe('CustomerComponent', () => {
                 FontAwesomeModule,
                 ModalModule.forRoot()
             ],
-            declarations: [CustomerComponent]
+            declarations: [
+                CustomerComponent,
+                MockComponent(CustomerInputComponent)
+            ]
         })
         .compileComponents();
     }));

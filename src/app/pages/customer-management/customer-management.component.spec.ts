@@ -5,11 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SearchPipe } from 'src/app/providers/pipes/search.pipe';
 import { CustomerComponent } from 'src/app/components/customer/customer.component';
-import { MockComponent, MockModule } from 'ng-mocks';
+import { MockComponent } from 'ng-mocks';
 import { CustomersService } from 'src/app/providers/services/customers.service';
 import { of } from 'rxjs';
-import { ModalModule, BsModalService } from 'ngx-bootstrap';
-import { AlertModule, AlertService } from 'ngx-alerts';
+import { BsModalService, ModalModule } from 'ngx-bootstrap';
+import { AlertModule } from 'ngx-alerts';
 
 export const TestCustomers = [
     {
@@ -61,7 +61,7 @@ export const TestCustomers = [
 describe('CustomerManagementComponent', () => {
     let component: CustomerManagementComponent;
     let fixture: ComponentFixture<CustomerManagementComponent>;
-    let getAllSpy, addSpy, updateSpy, deleteSpy;
+    let initSpy, getSpy, addSpy, updateSpy, deleteSpy, customersService;
     const testCustomers = TestCustomers;
     const newCustomer = {
         first_name: 'John',
@@ -87,21 +87,19 @@ describe('CustomerManagementComponent', () => {
     const deletedCustomerId = 2;
 
     beforeEach(async(() => {
-        // Create a fake CustomersService object with a `getAll()` spy
-        const customersService = jasmine.createSpyObj('CustomersService', ['getAll', 'add', 'update', 'delete']);
+        // Create a fake CustomersService object with a `get()` spy
+        customersService = jasmine.createSpyObj('CustomersService', ['init', 'get', 'add', 'update', 'delete']);
         // Make the spy return a synchronous Observable with the test data
-        getAllSpy = customersService.getAll.and.returnValue(of(testCustomers));
-        addSpy = customersService.add.and.returnValue([...testCustomers, newCustomer]);
-        updateSpy = customersService.update.and.returnValue([
-            updatedCustomer,
-            ...testCustomers.slice(1)
-        ]);
-        deleteSpy = customersService.delete.and.returnValue(testCustomers.filter(customer => customer.id !== deletedCustomerId));
+        initSpy = customersService.init.and.returnValue(of(testCustomers));
+        addSpy = customersService.add.and.returnValue(of('Added successfully'));
+        updateSpy = customersService.update.and.returnValue(of('Updated successfully'));
+        deleteSpy = customersService.delete.and.returnValue(of('Deleted successfully'));
+        customersService.customers = testCustomers;
 
         TestBed.configureTestingModule({
             imports: [
                 FormsModule,
-                MockModule(NgxPaginationModule),
+                NgxPaginationModule,
                 AlertModule.forRoot(),
                 ModalModule.forRoot()
             ],
@@ -128,9 +126,20 @@ describe('CustomerManagementComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    describe('.getAll()', () => {
+    describe('.init()', () => {
+        it('should initialize customers object', () => {
+            expect(initSpy.calls.any()).toBe(true, 'get called');
+            expect(component.customers).toEqual(testCustomers);
+        });
+    });
+
+    describe('.get()', () => {
         it('should get all the customers', () => {
-            expect(getAllSpy.calls.any()).toBe(true, 'getAll called');
+            getSpy = customersService.get.and.returnValue(of(testCustomers));
+            component.getCustomers();
+
+            expect(getSpy.calls.any()).toBe(true, 'get called');
+            expect(component.customers).toEqual(testCustomers);
         });
     });
 
@@ -140,10 +149,10 @@ describe('CustomerManagementComponent', () => {
         });
 
         it('should add a new customer', () => {
+            getSpy = customersService.get.and.returnValue(of([...testCustomers, newCustomer]));
             component.customers = testCustomers;
             component.onAdd(newCustomer);
 
-            expect(addSpy.calls.any()).toBe(true, 'add called');
             expect(component.customers.length).toEqual(testCustomers.length + 1);
             expect(component.customers).toContain(jasmine.objectContaining(newCustomer));
         });
@@ -155,10 +164,10 @@ describe('CustomerManagementComponent', () => {
         });
 
         it('should update an existing customer', () => {
+            getSpy = customersService.get.and.returnValue(of([updatedCustomer, ...testCustomers.slice(1)]));
             component.customers = testCustomers;
             component.onUpdate(updatedCustomer);
 
-            expect(updateSpy.calls.any()).toBe(true, 'update called');
             expect(component.customers.length).toEqual(testCustomers.length);
             expect(component.customers).toContain(jasmine.objectContaining(updatedCustomer));
         });
@@ -182,12 +191,13 @@ describe('CustomerManagementComponent', () => {
         });
 
         it('should delete an existing customer', () => {
+            getSpy = customersService.get.and.returnValue(of(testCustomers.filter(customer => customer.id !== deletedCustomerId)));
             component.customers = testCustomers;
             component.onDelete(deletedCustomerId);
 
-            expect(deleteSpy.calls.any()).toBe(true, 'delete called');
             expect(component.customers.length).toEqual(testCustomers.length - 1);
             expect(component.customers).not.toContain(jasmine.objectContaining(deletedCustomer));
         });
     });
+
 });
