@@ -1,25 +1,27 @@
-# Code Challenge
+# Angular CRUD
 
-This is a customer CRUD application that was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3.
+This is a CRUD application based on a customer management portal that was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3.
 
-### Getting Started
+## Getting Started
 
 Must have [node.js](http://nodejs.org) and [git](https://git-scm.com/downloads) installed in the system.
 
-## Install Angular CLI using npm package manager
+### Install Angular CLI using npm package manager
+```
 npm install -g @angular/cli
+```
 
-### Installation
+## Installation
+```
+# Clone the application
+git clone git@github.com:nashidahmed/angular_crud.git
 
-## Clone the application
-git clone ssh://git@git.allegiantair.com:7999/~qk1n/code-challenge.git
-
-## Navigate to the project directory
+# Navigate to the project directory
 cd code-challenge
 
-## Install npm dependencies
+# Install npm dependencies
 npm install
-
+```
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

@@ -31,7 +31,7 @@ describe('CustomerComponent', () => {
         component = fixture.componentInstance;
         component.customer = {
             id: 1,
-            email: 'nashid.ahmed@people10.com',
+            email: 'nashid.ahmed@test.com',
             first_name: 'Nashid',
             last_name: 'Shah',
             ip: '123.564.23.467',

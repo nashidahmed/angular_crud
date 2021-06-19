@@ -12,7 +12,7 @@ describe('SearchPipe', () => {
     it('searches for "Nashid" in the customer list', () => {
         const searchResults = [{
             id: 1,
-            email: 'nashid.ahmed@people10.com',
+            email: 'nashid.ahmed@test.com',
             first_name: 'Nashid',
             last_name: 'Shah',
             ip: '112.123.54.184',

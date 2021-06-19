@@ -104,7 +104,7 @@ describe('CustomersService', () => {
         const deletedCustomerId = 2;
         const deletedCustomer = {
             id: 2,
-            email: 'bijin.balakrishnan@people10.com',
+            email: 'bijin.balakrishnan@test.com',
             first_name: 'Bijin',
             last_name: 'Balakrishnan',
             ip: '32.43.65.235',

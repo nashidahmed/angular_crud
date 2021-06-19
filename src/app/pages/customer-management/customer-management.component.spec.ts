@@ -14,7 +14,7 @@ import { AlertModule } from 'ngx-alerts';
 export const TestCustomers = [
     {
         id: 1,
-        email: 'nashid.ahmed@people10.com',
+        email: 'nashid.ahmed@test.com',
         first_name: 'Nashid',
         last_name: 'Shah',
         ip: '112.123.54.184',
@@ -25,7 +25,7 @@ export const TestCustomers = [
     },
     {
         id: 2,
-        email: 'bijin.balakrishnan@people10.com',
+        email: 'bijin.balakrishnan@test.com',
         first_name: 'Bijin',
         last_name: 'Balakrishnan',
         ip: '32.43.65.235',
@@ -176,7 +176,7 @@ describe('CustomerManagementComponent', () => {
     describe('.onDelete()', () => {
         const deletedCustomer = {
             id: 2,
-            email: 'bijin.balakrishnan@people10.com',
+            email: 'bijin.balakrishnan@test.com',
             first_name: 'Bijin',
             last_name: 'Balakrishnan',
             ip: '32.43.65.235',
