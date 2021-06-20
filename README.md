@@ -17,7 +17,7 @@ npm install -g @angular/cli
 ## Setting Up
 Clone the application
 ```
-git clone git@github.com:nashidahmed/angular_crud.git
+git clone https://github.com/nashidahmed/angular_crud.git
 ```
 
 Navigate to the project directory
