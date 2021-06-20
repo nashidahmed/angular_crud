@@ -1,25 +1,32 @@
-# Angular CRUD
+<h1 align="center">Angular CRUD</h1>
 
-This is a CRUD application based on a customer management portal that was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3.
+<i align="center">This is a CRUD application based on a customer management portal that was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3.</i>
+
+<hr />
 
 ## Getting Started
 
-Must have [node.js](http://nodejs.org) and [git](https://git-scm.com/downloads) installed in the system.
+### Prerequisites
+ - Must have [Node.js](http://nodejs.org) and [Git](https://git-scm.com/downloads) installed in the system.
 
-### Install Angular CLI using npm package manager
+Install Angular CLI globally using [Node Package Manager](https://www.npmjs.com/get-npm)
 ```
 npm install -g @angular/cli
 ```
 
-## Installation
+## Setting Up
+Clone the application
 ```
-# Clone the application
 git clone git@github.com:nashidahmed/angular_crud.git
+```
 
-# Navigate to the project directory
+Navigate to the project directory
+```
 cd code-challenge
+```
 
-# Install npm dependencies
+Install npm dependencies
+```
 npm install
 ```
 ## Development server
